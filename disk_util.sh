@@ -10,7 +10,7 @@ Instance_Public_Ip=$(aws ec2 describe-instances --instance-ids "i-04d0291415xxxx
 
 echo "$CURRENT_UTIL%"
 
-if [[ $CURRENT_UTIL -gt THRESHOLD ]];
+if [[ $CURRENT_UTIL -gt $THRESHOLD ]];
 then
         echo "Alert: Current utilization is beyond threshold"
         echo "Hence triggerring a notification"
