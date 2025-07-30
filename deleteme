@@ -1,0 +1,175 @@
+Q)what is the purpose of .terrafom.lock.hcl file 
+This file is generated when we first initilize the terrafom directory where have our provider configuration.
+in general terraform init will initialize the working directory and installs the provider plugin and creates two file .terraform and .terrafom.lock.hcl 
+This .terrafom.lock.hcl contains exact providers version that are used to create the terrafom managed infrastructure.it will lock the exact version to maintain consistancy across all the environments.
+
+cat .terraform.lock.hcl 
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/hashicorp/aws" {
+  version     = "6.3.0"
+  constraints = "6.3.0"
+  hashes = [
+    "h1:CeYTPZ8FvkzsvCavg2F7UExDFkSFHlnJ7Fj40RN7aNU=",
+    "zh:0502dc1889cca94c89bfc00b214970bffa2d81a2cdb55e05ab6192484ddb1532",
+    "zh:0a009c6f643410dc29fe2c07aee57e726ac86335fad84788fc7412abbd3a55be",
+    "zh:0ddd577e5f23dc0be23b87d62dff1f5694b88b1fbc01bdd3046b4b51cc18a00c",
+    "zh:1b2754cb01fa2c1a6a59c4195212f6bd4b3d1602e3f4ffb94ab609e01f2ea11a",
+    "zh:2bc0edb35a1411670d74e827db58ef32a07e11757fdaa17934dce5451511e55a",
+    "zh:703415b5c58d9232bdb686816e90525dfe96b0a374062bd8e27bec553cac5538",
+    "zh:8c4f1f41722aacb4b128dfb269f5b3f0aa1239a5742f22abb012f87095b2244c",
+    "zh:9815c0cc480acfef7c9b6b31505070bb0247a0982d98b4b6e51b1923b3a65f7e",
+    "zh:9b12af85486a96aedd8d7984b0ff811a4b42e3d88dad1a3fb4c0b580d04fa425",
+    "zh:b3563ce1e4c40fa139c045a1db06c3308fcf8aa9722c0a586a18bfbcedc111b5",
+    "zh:bbcf01aa5188416cb0f31425c2dfc3a4df41248d4dce9ebab709d416177a3011",
+    "zh:bc49559699e6a03ff57675172fc367db9993df74a502e0c6f273127af82990a9",
+    "zh:c89bbeee5db6bbe80ce152481b85a4d44b733d7c1e1a37924f36c9cde0b7ce2d",
+    "zh:d26793472e127a98dfa5d32a71adc4c960b573afc427604c9815bae9cda31a72",
+    "zh:eb8db004ccbf52b3ed8b15189c59560c233abd2c2f5ac5ee68768841c3c8e206",
+  ]
+}
+
+
+Q)How do you upgrade plugins in terraform?
+
+TO update the provider plugins.
+1) we need to update the desire version in the provider.tf or required_providers block in the terraform configuration.
+2) Then execute terrafom init -upgrade 
+   This command will download the latest version of the provider that matches your version constraint
+   Updates the .terraform.lock.hcl file with the new version and checksums
+3) then verify the .terrafom.lock.hcl file 
+  
+Steps:
+ updated provider from 6.3.0 to 6.5.0 in provider.tf file under required_providefr block.
+ executed 
+ $ terraform init -upgrade 
+ output:
+  [ec2-user@ip-172-31-47-110 terraform]$ terraform init -upgrade
+Initializing the backend...
+Upgrading modules...
+- ec2 in modules/ec2
+- efs in modules/efs
+- eks in modules/eks
+- node_group in modules/eks-node-group
+- sg in modules/security-groups
+- vpc in modules/vpc
+Initializing provider plugins...
+- Finding hashicorp/aws versions matching "6.5.0"...
+- Installing hashicorp/aws v6.5.0...
+- Installed hashicorp/aws v6.5.0 (signed by HashiCorp)
+Terraform has made some changes to the provider dependency selections recorded
+in the .terraform.lock.hcl file. Review those changes and commit them to your
+version control system if they represent changes you intended to make.
+
+Terraform has been successfully initialized!
+
+$ cat .terraform.lock.hcl 
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/hashicorp/aws" {
+  version     = "6.5.0"
+  constraints = "6.5.0"
+  hashes = [
+    "h1:Tn/mGUS27xOhYi1yGXJfQXQtScNvyuTjd49KX5ZjhBM=",
+    "zh:0257c2719dc8508bc3ef5ac8df3c84b3ef61211ec46b6e5ed951681bbfe08d22",
+    "zh:3828d4409e2a68fccc9f9fb583167501cc4d38a5ecbb2408cb5781096739311b",
+    "zh:3cf7062a4a2530c2137473cc4281fd088cfe0059ad8cdb766e2083ac02c85aa9",
+    "zh:44c2caadd5d3ad4a69a646251319cce406c9800b2b823c2c59e8b0a3ea73fabd",
+    "zh:4924d88dbb45c9a01dc69323f731b969c2562631832509525ad44331e3682f43",
+    "zh:5ff081d29aaeb160753f7ba412d218dfd8703f2aeb0bc6cebe5f91c94bf1376a",
+    "zh:6d3f2c29b3c51629cb9ea2b513a981fb98226c69eeda670bb4d2b5cd0af8d278",
+    "zh:7df20d6ce088b131501f5dae9c3de763f81ac266000c19d4d53be79f568ecd24",
+    "zh:93c1ecaeedbc76b28297480d6456c6e65d80c72a20f6e870e537d7d80531c911",
+    "zh:9b12af85486a96aedd8d7984b0ff811a4b42e3d88dad1a3fb4c0b580d04fa425",
+    "zh:ae8197c75460e25a664e76c183de79b798a82f31dcd99b44c6af2fd3ef249f5f",
+    "zh:aeacc428aa1f99a55432c969fb636dc6fc3346c6a95ebdcc5a240c222fbf0504",
+    "zh:be6d310269605985a8cf1d4d7984f3199b183dfc8cb3674c286c5bcfd4de7eb4",
+    "zh:c3ecd7a38af22d32479bcbca3c74c53969d71665ad4203b3102cbf519d6ddee7",
+    "zh:de127f5130604540b2be99c6b8b8253f4694a0a827cc9d186d72b545f27c45a5",
+  ]
+}
+ 
+
+Q) Whats the difference between .tfvars and .auto.tfvars file 
+Both are used to input variables in terraform configuration.
+to use tfvars we need to specify the -var-file while running the terraform apply command. 
+While .auto.tfvars will  be loaded automatically when we execute terraform plan or terrafom apply commands.
+
+
+Q) How do you restore a corrupted state file ?
+
+We have our state file in a S3 bucket so we can restore it by the previous version of the state file.
+
+If it is local we can restore it from terraform.tfstate.backup
+
+
+
+
+
+I have a case where multiple seperated fields lets say 5 fields if i want to output 3rd field what unix commands i can use 
+
+
+Mass Mutual
+-----------
+How do you manage your state file
+What all functions you used in terraform?
+In a variable I have a list of key value how can we iterate and pick up a specific attritbute  among them ?
+But what if that specific variable is not found I need to send a value  as null is that case how do you handle it?
+
+Suggest a policy and scope that policy to specific IAM group? - inline policy
+Lets say there are two accounts account a and account B and there are 2 users user A and user B. how can you give access to a specific resource or an s3 bucket in account B to user A?
+
+
+
+There are some workloads in on premise data centers then there are some workloads  in aws data centers.i want to establish a connection between them
+kubectl cordon node-name ?
+
+
+
+
+
+HCL-2
+---------
+Postgres hosted on a container environment 
+How does your jenkins cluster get authorised with your eks cluster?
+
+How do you read the authorization or authentication in eks cluster? how is ypur current cluster authorization mechanism work?
+
+I have a kubeconfig file and I connect to ypur k8s cluster how does that authorzation work ?
+
+If you are using plain kubeconfig files generated on the cluster the token are short lived if you are using that everytime you run you pipeline that token would expire? how do you manage that token expiry or get new token in the cloud?
+
+Lets say that you have two option you are the k8s admin whats your involvement in k8s administration?
+
+
+where you deployed statefull apps that application need to preserve the state of the application ?
+
+Lets say I have postgres db as a deployment with 20 replicas 
+Lets say for my entire product team I create a db so thta they can use so for this db we have multiple reader endpoints and ine single writer endpoint? How can you expose your k8s application if I have to access a particular reader if can be acess that particular reader endpoint 
+
+Lets say you have mysql db with 20 replicas in that 19 are reader replicas and 1  is writer replica ?one of the product team always access 17 the reader replica ?How can they access and how can we expose that individual service ?
+
+I have a private container registry the k8s need to pull the images from that private registry ? How  kubernetes gets authorized with that private registry?
+
+you said you are managing the DNS serice using GoDaddy ? how can you manage that DNS service using route 53 ?That means your domain registrar is GoDaddy but you still want to use Route53 as your DNS service ? 
+
+Lets say when ever an ec2 is launched from ASG that event should be captured and you should run lambda function once an ec2 instance is launched from ASG the instance should not be in service untill the lambda function is in service ?
+
+WHats the use case you have done with Cloud Front ? 
+What are the different origin types of cloud front ?
+
+Wile working with VPC have you worked with Transit gateway or direct connect ?
+
+Why do you need a dynamo db for state locking ?
+
+WHat is a splat expressionin terraform ?
+What is dynamic block in terraform ?
+
+What are the different types of provisioners that are available in terraform ?
+
+WHat kind of automation you have done with the Ansible?
+What kind of use cases you hae done with the bash shell scripting ?
+
+I have executed a command in linux terminal and after that i executed echo $? ad i get value as 256 or some non-zero ? why it is giving that ?
